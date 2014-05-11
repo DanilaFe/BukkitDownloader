@@ -269,6 +269,8 @@ public class Main {
 						 Desktop.getDesktop().open(f);
 					 }
 				 }
+				 
+				 System.exit(0);
 				
 				
 				
