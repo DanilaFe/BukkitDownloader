@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,7 +25,7 @@ public class Main {
 	int buffer = 0;
 	HttpURLConnection con;
 	int filecontent = -1;
-	final String DEVBUIL = "http://dl.bukkit.org/downloads/craftbukkit/get/latest-dev/craftbukkit.jar"; 
+	final String DEVBUILD = "http://dl.bukkit.org/downloads/craftbukkit/get/latest-dev/craftbukkit.jar"; 
 	final String RECBUILD = "http://dl.bukkit.org/latest-rb/craftbukkit.jar"; 
 	final String BETABUILD = "http://dl.bukkit.org/downloads/craftbukkit/get/latest-beta/craftbukkit.jar"; 
 	String system = System.getProperty("os.name");
@@ -32,6 +33,9 @@ public class Main {
 	File path;
 	String[] filetypes = new String[]{
 			"Recommended", "Dev" , "Beta"
+	};
+	String[] yesno = new String[]{
+		"Yes", "No"	
 	};
 	
 	
@@ -56,11 +60,40 @@ public class Main {
 	void generateServer(JFileChooser j){
 		File direcotry = j.getSelectedFile();
 		String selected = (String)JOptionPane.showInputDialog(null,"Select Bukkit Version", "Version Select", JOptionPane.QUESTION_MESSAGE, null,filetypes,filetypes[1]);
-		System.out.println(selected);
-		switch(selected.toLowerCase()){
-		case "recommended":
-			try {
-				URL download = new URL(RECBUILD);
+		if(selected != null){
+			System.out.println(selected);
+			URL download = null;
+			switch(selected.toLowerCase()){
+			case "recommended":
+				try {
+					download = new URL(RECBUILD);
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				break;
+			case "dev":
+				try {
+					download = new URL(DEVBUILD);
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				break;
+			case "beta":
+				try {
+					download = new URL(BETABUILD);
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+			
+			/*
+			 * Download file and generate Start.command
+			 */
+			try{
 				InputStream is = download.openStream();
 				con = (HttpURLConnection)download.openConnection();
 				
@@ -86,11 +119,55 @@ public class Main {
 				br.close();
 				updateframe.doclose();
 				
-			} catch (IOException e) {
-				e.printStackTrace();
+				int ram = getRam();
+				System.out.println(system);
+				if(system.startsWith("Windows")){
+					FileOutputStream fos2 = new FileOutputStream(direcotry.getAbsolutePath() + "/" + "start.bat");
+					PrintWriter pw = new PrintWriter(fos2);
+					pw.println("java -Xmx" + ram + "G -jar craftbukkit.jar -o true");
+					pw.println("PAUSE");
+					pw.close();
+					fos2.close();
+							
+				}
+				else if(system.contains("Unix")){
+					FileOutputStream fos2 = new FileOutputStream(direcotry.getAbsolutePath() + "/" + "start.sh");
+					PrintWriter pw = new PrintWriter(fos2);
+					pw.println("#!/bin/sh");
+					pw.println(" BINDIR=$(dirname \"$(readlink -fn \"$0\")\")");
+					pw.println(" cd \"$BINDIR\"");
+					pw.println("java -Xmx" + ram + "G -jar craftbukkit.jar -o true");
+					pw.close();
+					fos2.close();
+					Runtime.getRuntime().exec("chmod +x " + direcotry.getAbsolutePath() + "/" + "start.sh");
+				} 
+				else if(system.contains("Mac")){
+					FileOutputStream fos2 = new FileOutputStream(direcotry.getAbsolutePath() + "/" + "start.command");
+					PrintWriter pw = new PrintWriter(fos2);
+					pw.println("#!/bin/bash");
+					pw.println("cd \"$( dirname \"$0\" )\"");
+					pw.println("java -Xmx" + ram + "G -jar craftbukkit.jar -o true");
+					pw.close();
+					fos2.close();
+					Runtime.getRuntime().exec("chmod a+x " + direcotry.getAbsolutePath() + "/" + "start.command");
+				}
+				
+				String manual;
+			} catch(IOException e){
+				
 			}
-			break;
 		}
+	}
+	
+	public int getRam(){
+		String ram = JOptionPane.showInputDialog("How many Gigabytes of memory would you like the server to allocate?" + 2);
+		try{
+			int ramint = Integer.parseInt(ram);	
+			return ramint;
+		} catch(Exception e){
+			return -1;
+		}
+
 	}
 	
 }
