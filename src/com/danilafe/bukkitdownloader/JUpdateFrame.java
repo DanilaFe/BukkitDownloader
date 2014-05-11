@@ -1,6 +1,9 @@
 package com.danilafe.bukkitdownloader;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 public class JUpdateFrame extends JFrame {
@@ -14,12 +17,14 @@ public class JUpdateFrame extends JFrame {
 			System.out.println("Max = " + parent.filecontent);
 			System.out.println("Current = " + parent.bytecount);
 			bar = new JProgressBar(0, parent.filecontent);
-			us.add(bar);
-			us.setSize(500, 50);
+			us.setLayout(new BorderLayout());
+			us.add(new JLabel("Downloading craftbukkit.jar"), BorderLayout.NORTH);
+			us.add(bar, BorderLayout.CENTER);
+			us.setSize(500, 75);
 			us.setVisible(true);
 			while(true){
 				try {
-					Thread.sleep(500);
+					Thread.sleep(10);
 					bar.setValue(parent.bytecount);
 					bar.repaint();
 				} catch (InterruptedException e) {
