@@ -281,7 +281,7 @@ public class Main {
 	}
 	
 	public int getRam(){
-		String ram = JOptionPane.showInputDialog("How many Gigabytes of memory would you like the server to allocate?" + 2);
+		String ram = JOptionPane.showInputDialog("How many Gigabytes of memory would you like the server to allocate?",2);
 		try{
 			int ramint = Integer.parseInt(ram);	
 			return ramint;
@@ -332,7 +332,7 @@ public class Main {
 			pwr.println("difficulty=" + (String) JOptionPane.showInputDialog(null,"Server Difficulty: \n 0 = Peaceful \n 1 = Easy \n 2 = Normal \n 3 = Hard", "Config settings", JOptionPane.QUESTION_MESSAGE, null,new String[] {
 					"0","1","2","3"
 			},"true"));
-			pwr.println("gamemode=" + (String) JOptionPane.showInputDialog(null,"Server Difficulty: \n 0 = Survivial \n 1 = Creative \n 2 = Adventure", "Config settings", JOptionPane.QUESTION_MESSAGE, null,new String[] {
+			pwr.println("gamemode=" + (String) JOptionPane.showInputDialog(null,"Server Gamemode: \n 0 = Survivial \n 1 = Creative \n 2 = Adventure", "Config settings", JOptionPane.QUESTION_MESSAGE, null,new String[] {
 					"0","1","2","3"
 			},"true"));
 			pwr.println("enable-command-block=" + (String) JOptionPane.showInputDialog(null,"Enable Command Blocks?", "Config settings", JOptionPane.QUESTION_MESSAGE, null,new String[] {
