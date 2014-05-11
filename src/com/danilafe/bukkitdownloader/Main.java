@@ -261,6 +261,14 @@ public class Main {
 				 if(i == JOptionPane.YES_OPTION){
 					 Desktop.getDesktop().browse(new URI("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MVENJVD6Y6EXJ&lc=US&item_name=hawkfalcon&item_number=hawkfalcon&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted"));
 				 }
+				 
+				 //Open start command.
+				 File[] files = direcotry.listFiles();
+				 for(File f: files){
+					 if(f.getName().startsWith("start.")){
+						 Desktop.getDesktop().open(f);
+					 }
+				 }
 				
 				
 				
